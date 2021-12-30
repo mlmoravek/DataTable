@@ -1,3 +1,113 @@
+<template>
+  <div class="dt-container" v-if="options">
+    <template v-if="loading">
+      <div class="dt-info dt-loading">Loading DataTable...</div>
+    </template>
+
+    <template v-else>
+      <div class="dt-top">
+        <h1 class="dt-title">{{ title }}</h1>
+        <search class="dt-search" :value="search" @search="searchHandler" />
+      </div>
+      <table class="dt-table dataTable">
+        <thead class="dt-head" v-if="options.header">
+          <tr>
+            <template v-for="(item, index) in options.header">
+              <th
+                v-if="item.value != options.groupedBy"
+                class="th"
+                :key="index"
+                :class="{
+                  sortable: item.sortable,
+                  'order-asc': item.value == sort.key && sort.dir == 'asc',
+                  'order-desc': item.value == sort.key && sort.dir == 'desc',
+                }"
+                @click="item.sortable ? changeSort(item.value) : ''"
+              >
+                {{ item.text }}
+              </th>
+            </template>
+            <th v-if="options.actions && options.actions.length" class="th">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody v-if="options.rows && options.rows.length > 0">
+          <template v-for="(row, rindex) in options.rows">
+            <template v-if="isGroupLabel(rindex)">
+              <tr class="dt-row dt-grouped" :key="rindex" @click="emitClick">
+                <td
+                  class="dt-cell"
+                  :colspan="options.header.length - (options.actions ? 0 : 1)"
+                >
+                  {{ row[options.groupedBy] }}
+                </td>
+              </tr>
+            </template>
+            <tr class="dt-row" :key="rindex">
+              <template v-for="(item, hindex) in options.header">
+                <td
+                  v-if="item.value != options.groupedBy"
+                  class="dt-cell"
+                  :key="hindex"
+                >
+                  {{ row[item.value] }}
+                </td>
+              </template>
+              <th
+                v-if="options.actions && options.actions.length"
+                class="dt-cell"
+              >
+                <button
+                  v-for="(action, i) in options.actions"
+                  :key="i"
+                  class="btn-action"
+                  type="button"
+                  @click="action.f(row)"
+                  :title="action.title"
+                >
+                  <i :class="action.icon"></i>
+                </button>
+              </th>
+            </tr>
+          </template>
+        </tbody>
+        <tbody v-else>
+          <tr class="dt-row dt-grouped">
+            <td
+              class="dt-cell"
+              :colspan="
+                options.header.length + (options.actions.length ? 1 : 0)
+              "
+            >
+              <div class="dt-empty">DataTable is empty</div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="dtfoot"></tfoot>
+      </table>
+      <div class="dt-bottom">
+        <div class="dt-size">
+          <label for="size">Show</label>
+          <select name="size" v-model="page.size">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <pagination
+          class="dt-pagination"
+          :page="options.page"
+          :pages="Math.ceil(options.total / page.size)"
+          @change="changePage"
+        />
+      </div>
+    </template>
+  </div>
+</template>
+
 <script lang="ts">
 import { defineComponent, reactive, ref, watchEffect } from "vue";
 import Search from "./Search.vue";
@@ -110,116 +220,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <div class="dt-container" v-if="options">
-    <template v-if="loading">
-      <div class="dt-info dt-loading">Loading DataTable...</div>
-    </template>
-
-    <template v-else>
-      <div class="dt-top">
-        <h1 class="dt-title">{{ title }}</h1>
-        <search class="dt-search" :value="search" @search="searchHandler" />
-      </div>
-      <table class="dt-table dataTable">
-        <thead class="dt-head" v-if="options.header">
-          <tr>
-            <template v-for="(item, index) in options.header">
-              <th
-                v-if="item.value != options.groupedBy"
-                class="th"
-                :key="index"
-                :class="{
-                  sortable: item.sortable,
-                  'order-asc': item.value == sort.key && sort.dir == 'asc',
-                  'order-desc': item.value == sort.key && sort.dir == 'desc',
-                }"
-                @click="item.sortable ? changeSort(item.value) : ''"
-              >
-                {{ item.text }}
-              </th>
-            </template>
-            <th v-if="options.actions && options.actions.length" class="th">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody v-if="options.rows && options.rows.length > 0">
-          <template v-for="(row, rindex) in options.rows">
-            <template v-if="isGroupLabel(rindex)">
-              <tr class="dt-row dt-grouped" :key="rindex" @click="emitClick">
-                <td
-                  class="dt-cell"
-                  :colspan="options.header.length - (options.actions ? 0 : 1)"
-                >
-                  {{ row[options.groupedBy] }}
-                </td>
-              </tr>
-            </template>
-            <tr class="dt-row" :key="rindex">
-              <template v-for="(item, hindex) in options.header">
-                <td
-                  v-if="item.value != options.groupedBy"
-                  class="dt-cell"
-                  :key="hindex"
-                >
-                  {{ row[item.value] }}
-                </td>
-              </template>
-              <th
-                v-if="options.actions && options.actions.length"
-                class="dt-cell"
-              >
-                <button
-                  v-for="(action, i) in options.actions"
-                  :key="i"
-                  class="btn-action"
-                  type="button"
-                  @click="action.f(row)"
-                  :title="action.title"
-                >
-                  <i :class="action.icon"></i>
-                </button>
-              </th>
-            </tr>
-          </template>
-        </tbody>
-        <tbody v-else>
-          <tr class="dt-row dt-grouped">
-            <td
-              class="dt-cell"
-              :colspan="
-                options.header.length + (options.actions.length ? 1 : 0)
-              "
-            >
-              <div class="dt-empty">DataTable is empty</div>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot class="dtfoot"></tfoot>
-      </table>
-      <div class="dt-bottom">
-        <div class="dt-size">
-          <label for="size">Show</label>
-          <select name="size" v-model="page.size">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </div>
-        <pagination
-          class="dt-pagination"
-          :page="options.page"
-          :pages="Math.ceil(options.total / page.size)"
-          @change="changePage"
-        />
-      </div>
-    </template>
-  </div>
-</template>
 
 <style scoped lang="scss">
 .dt-loading {

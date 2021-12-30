@@ -1,27 +1,3 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "Detail",
-  components: {},
-  props: {
-    title: String,
-  },
-  setup(props, context) {
-    const emitClose = () => {
-      context.emit("close");
-    };
-    const emitSave = () => {
-      context.emit("save");
-    };
-    const emitDelete = () => {
-      context.emit("delete");
-    };
-    return { emitClose, emitSave, emitDelete };
-  },
-});
-</script>
-
 <template>
   <div class="modal">
     <div class="modal-header">
@@ -50,6 +26,30 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "Detail",
+  components: {},
+  props: {
+    title: String,
+  },
+  setup(props, context) {
+    const emitClose = () => {
+      context.emit("close");
+    };
+    const emitSave = () => {
+      context.emit("save");
+    };
+    const emitDelete = () => {
+      context.emit("delete");
+    };
+    return { emitClose, emitSave, emitDelete };
+  },
+});
+</script>
 
 <style scoped lang="scss">
 .modal {

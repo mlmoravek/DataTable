@@ -1,3 +1,17 @@
+<template>
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search.."
+      name="search"
+      @input="emitChange($event.target.value)"
+    />
+    <button type="submit" @click="emitClick()">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+</template>
+
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
@@ -17,20 +31,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <div class="search-container">
-    <input
-      type="text"
-      placeholder="Search.."
-      name="search"
-      @input="emitChange($event.target.value)"
-    />
-    <button type="submit" @click="emitClick()">
-      <i class="fa fa-search"></i>
-    </button>
-  </div>
-</template>
 
 <style scoped lang="scss">
 .search-container {
