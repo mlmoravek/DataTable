@@ -17,7 +17,7 @@ export { DataTable, TableNavigation, TablePagination, setConfig };
 import type { App } from "vue";
 
 export default {
-  install: (app: App, options: Config): void => {
+  install: (app: App, options: Config = {} as Config): void => {
     setConfig(Object.assign(useConfig(), options));
 
     // add datatable component
