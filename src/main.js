@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import Oruga from "@oruga-ui/oruga-next";
 
 // import Datatable Plugin
-import Datatable from "./components/datatable";
+import Datatable from "./datatable";
 
 //  import App Component
 import App from "./App.vue";

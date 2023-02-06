@@ -8,7 +8,7 @@ import {
   DataTable,
   type Header,
   type LoadResponse,
-} from "@/components/datatable";
+} from "@/datatable";
 import axios, { type AxiosResponse } from "axios";
 
 const emits = defineEmits(["delete", "add", "edit", "deleted"]);

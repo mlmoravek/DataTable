@@ -2,7 +2,7 @@
   "name": "datatable",
   "version": "1.0.0",
   "description": "A Oruga table wrapper",
-  "main": "src/components/datatable/index.js",
+  "main": "src/datatable/index.js",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vue-tsc --noEmit && vite build",
