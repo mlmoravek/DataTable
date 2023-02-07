@@ -1,8 +1,5 @@
 # DataTable
 
-Multiple Vue DataTable components.
+A [Oruga Table](https://oruga.io/components/Table.html) wrapper component providing usefull DataTable functions.
 
-A version for the component library Buefy and a self implemented one based on Vue composition api.
-As well as a simple modal.
-
-!! NOT EXECUTABLE !!
+Documentation TBC.
